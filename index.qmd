@@ -3,8 +3,10 @@ title: "Analysis of duration of response in oncology studies"
 author: Lu Mao, Lu Tian, Bo Huang, Lee-Jen Wei
 format: 
   html:
-    page-layout: full
     html-math-method: katex
+    toc: true
+    toc-depth: 4
+    toc-expand: true
 execute: 
   # eval: false
   echo: true
