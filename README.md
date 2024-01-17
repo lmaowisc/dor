@@ -1,4 +1,4 @@
 # DOR
-This package is used for analyzing the distribution of duration of response in oncology studies.
+This package is used for analysis of duration of response in oncology studies.
 
-See 
+See https://lmaowisc.github.io/dor for details and examples.
