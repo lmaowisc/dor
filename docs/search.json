@@ -2,8 +2,8 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Estimating the distribution of duration of response",
+    "title": "Analysis of duration of response in oncology studies.",
     "section": "",
-    "text": "ss"
+    "text": "This R-code implements the analysis of duration-of-response data for oncology studies described in Mao et al. (2014).\n(Huang et al. 2018)\nMao et al. (2014)\n\n\n\n\nReferences\n\nHuang, Bo, Lu Tian, Enayet Talukder, Mace Rothenberg, Dae Hyun Kim, and Lee-Jen Wei. 2018. “Evaluating Treatment Effect Based on Duration of Response for a Comparative Oncology Study.” JAMA Oncology 4 (6): 874. https://doi.org/10.1001/jamaoncol.2018.0275.\n\n\nMao, Lu, Lu Tian, Bo Huang, Paul G. Richardson, Mace Rothenberg, Dae Hyun Kim, and Lee-Jen Wei. 2014. “Analysis of Duration-of-Response Data for Oncology Studies.”"
   }
 ]

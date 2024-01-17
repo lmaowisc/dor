@@ -3,12 +3,11 @@ project:
   output-dir: docs
 
 website:
-  title: "BMI/STAT 741 Course Study Site"
-  navbar:
-    left:
-      - href: index.qmd
-        text: Home
-        
+  title: "Duration of response in oncology"
+  # navbar:
+  #   left:
+  #     - href: index.qmd
+  #       text: Home
 format:
   html:
     theme: cosmo

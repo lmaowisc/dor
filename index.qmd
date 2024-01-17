@@ -1,7 +1,10 @@
 ---
-title: "Estimating the distribution of duration of response"
+title: "Analysis of duration of response in oncology studies"
+bibliography: references.bib
 ---
 
-ss
+This R-code implements the analysis of duration-of-response data for oncology studies described in @mao:2024.
 
+[@huang2018]
 
+@mao:2024
