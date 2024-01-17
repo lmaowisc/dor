@@ -36,7 +36,7 @@ A simple estimator of $S_D(t)$ is the inverse probability censoring weighted (IP
 \hat S_D(t)=n^{-1}\sum_{i=1}^n  \frac{\Delta_{2i}}{\hat{G}_C(X_{2i})} I(\tilde D_i> t),
 $$ where $\hat{G}_C(t)$ is the Kaplan--Meier estimator of $G_C(t)=P(C>t)$ based on $\{(X_{2i}, 1-\Delta_{2i}), i=1, \cdots, n\}$. To see $\hat S_D(t)$ as a valid estimator, note that $\Delta_{2}=1$ implies that $X_2=T_2\wedge\tau$, $X_1=T_1\wedge\tau$ and thus that $\tilde D = D$. Hence, $E\left\{\Delta_2I(\tilde D>t)/G_C(X_2)\right\}= E\left\{\Delta_2I(D>t)/G_C(T_2\wedge\tau)\right\} =E\left[E\left\{\Delta_2I(D>t)/G_C(T_2\wedge\tau)\mid T_1, T_2\right\}\right] =E\{I(D>t)\}=S_D(t)$, where the second equality follows by the independence of $C$ and $(T_1, T_2)$. Moreover, we can show that $\hat S_D(t)$ converges weakly to a Gaussian process with an easily estimable variance function.
 
-The median DOR can thus be estimated by $\inf\{t: \hat S_D(t)\geq 0.5\}$, whose variance can be estimated by the perturbing the influence functions of $\hat S_D(t)$ using standard normal random noises.
+The median DOR can thus be estimated by $\inf\{t: \hat S_D(t)\leq 0.5\}$, whose variance can be estimated by the perturbing the influence functions of $\hat S_D(t)$ using standard normal random noises.
 
 ### Usage and Example
 
