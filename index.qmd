@@ -24,7 +24,7 @@ For notational convenience, set $T_1=T_2$ for nonresponders.
 
 #### R-program
 
-To use the program, download `DORfunctions.R` from <https://github.com/lmaowisc/dor>. The file contains all functions needed to perform the analysis.
+To use the program, download `DORfunctions.R` from repo <https://github.com/lmaowisc/dor>. The file contains all functions needed to perform the analysis.
 
 ```{r}
 source("DORfunctions.R")
@@ -46,6 +46,10 @@ The main function is `dorfit(x1, delta1, x2, delta2, tau, med_inf = FALSE)`.
 -   `t1` vector of times (t)
 -   `surv1` IPCW estimates of survival function $P(D > t)$
 -   `se1` pointwise standard error of $P(D > t)$
+-   `med` median estimate of DOR
+-   `med_se, med_lo, med_hi` these are standard error, 
+lower and upper limits of the 95\% confidence interval of the median, respectively,
+ if `med_inf = TRUE`; all `NULL` if `med_inf = FALSE`
 
 
 #### A simulated example

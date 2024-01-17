@@ -221,6 +221,8 @@ div.csl-indent {
 <li><code>t1</code> vector of times (t)</li>
 <li><code>surv1</code> IPCW estimates of survival function <span class="math inline">\(P(D &gt; t)\)</span></li>
 <li><code>se1</code> pointwise standard error of <span class="math inline">\(P(D &gt; t)\)</span></li>
+<li><code>med</code> median estimate of DOR</li>
+<li><code>med_se, med_lo, med_hi</code> these are standard error, lower and upper limits of the 95% confidence interval of the median, respectively, if <code>med_inf = TRUE</code>; all <code>NULL</code> if <code>med_inf = FALSE</code></li>
 </ul>
 </section>
 <section id="a-simulated-example" class="level4">
