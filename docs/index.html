@@ -202,9 +202,10 @@ div.csl-indent {
 <h3 class="anchored" data-anchor-id="usage-and-example">Usage and Example</h3>
 <section id="r-program" class="level4">
 <h4 class="anchored" data-anchor-id="r-program">R-program</h4>
-<p>To use the program, download <code>DORfunctions.R</code> from <a href="https://github.com/lmaowisc/dor" class="uri">https://github.com/lmaowisc/dor</a>. The file contains all functions needed to perform the analysis.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"DORfunctions.R"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>To use the program, download <code>DORfunctions.R</code> from repo <a href="https://github.com/lmaowisc/dor" class="uri">https://github.com/lmaowisc/dor</a>. The R-file contains all functions needed to perform the analysis. We also need the standard <code>survival</code> package.</p>
+<div class="cell" data-hash="index_cache/html/unnamed-chunk-1_45f2cebf0171a16494b6854f0722c3e6">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survival)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"DORfunctions.R"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The main function is <code>dorfit(x1, delta1, x2, delta2, tau, med_inf = FALSE)</code>.</p>
 <p><strong>Input</strong></p>
@@ -227,7 +228,66 @@ div.csl-indent {
 </section>
 <section id="a-simulated-example" class="level4">
 <h4 class="anchored" data-anchor-id="a-simulated-example">A simulated example</h4>
-<p>ss</p>
+<p>Let’s simulate a data set of size <span class="math inline">\(n=200\)</span>.</p>
+<div class="cell" data-hash="index_cache/html/unnamed-chunk-2_9e9ebfb9c0f54195d1ec6cc5b004c3a7">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set seed for random number generation</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2023</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="do">## simulate data</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">200</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># set restriction time</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>tau <span class="ot">&lt;-</span> <span class="fl">1.25</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># full data</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>t1 <span class="ot">&lt;-</span> <span class="fu">pmin</span>(<span class="fu">rexp</span>(n), <span class="fu">runif</span>(n, <span class="dv">0</span>, <span class="fl">0.75</span>)) <span class="co"># response time</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>t2 <span class="ot">&lt;-</span> <span class="fu">rexp</span>(n)<span class="sc">*</span><span class="fl">1.5</span> <span class="co"># outcome event time</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>t1[t1<span class="sc">&gt;</span>t2] <span class="ot">&lt;-</span> t2[t1<span class="sc">&gt;</span>t2] <span class="co"># set t1 = t2 for non-responders</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>c <span class="ot">&lt;-</span> <span class="fu">runif</span>(n, <span class="dv">0</span>, <span class="fl">1.5</span>) <span class="co"># censoring time</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co"># observed (censored) data</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>x1 <span class="ot">&lt;-</span> <span class="fu">pmin</span>(t1, c)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>delta1 <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">*</span>(t1<span class="sc">&lt;</span>c)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> <span class="fu">pmin</span>(t2, c)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>delta2 <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">*</span>(t2<span class="sc">&lt;</span>c)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>So the observed data consist of <code>x1</code>, <code>delta1</code>, <code>x2</code>, and <code>delta2</code>. Under restriction time <code>tau</code><span class="math inline">\(= 1.25\)</span>. We analyze the DOR distribution using the main function <code>dorfit()</code>, with inference on the median.</p>
+<div class="cell" data-hash="index_cache/html/unnamed-chunk-3_a995374c5cd6f27525ea47fc2b7fca51">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fitLM <span class="ot">&lt;-</span> <span class="fu">dorfit</span>(x1, delta1, x2, delta2, tau, <span class="at">med_inf =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s plot the estimated <span class="math inline">\(S_D(t)\)</span> with 95% pointwise confidence limits.</p>
+<div class="cell" data-hash="index_cache/html/unnamed-chunk-4_74c734447ec045064857f84951564a65">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>za <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="do">## marginal survival function P(D &gt; t)</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> fitLM<span class="sc">$</span>t1 <span class="co"># times</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>St <span class="ot">&lt;-</span> fitLM<span class="sc">$</span>surv1 <span class="co"># P(D &gt; t)</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>se <span class="ot">&lt;-</span> fitLM<span class="sc">$</span>se1 <span class="co"># se of P(D &gt; t)</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># set up the figure</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">1.2</span>), <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">type=</span><span class="st">"n"</span>,<span class="at">xlab=</span><span class="st">"t"</span>,<span class="at">ylab=</span><span class="fu">expression</span>(S[D](t)))</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the marginal curve P(D &gt; t)</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">stepfun</span>(t, <span class="fu">c</span>(<span class="dv">1</span>,St)),<span class="at">lwd=</span><span class="dv">2</span>, <span class="at">do.points =</span> <span class="cn">FALSE</span>) <span class="co"># marginal</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">stepfun</span>(t, <span class="fu">c</span>(<span class="dv">1</span>,St <span class="sc">+</span> za <span class="sc">*</span> se)),<span class="at">lty =</span> <span class="dv">3</span>, <span class="at">do.points =</span> <span class="cn">FALSE</span>) <span class="co"># upper 95% CI </span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">stepfun</span>(t, <span class="fu">c</span>(<span class="dv">1</span>,St <span class="sc">-</span> za <span class="sc">*</span> se)),<span class="at">lty =</span> <span class="dv">3</span>, <span class="at">do.points =</span> <span class="cn">FALSE</span>) <span class="co"># lower 95% CI </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We can see that the median is close to 0.6. The precise number and confidence interval (CI) can be obtained from <code>obj</code>.</p>
+<div class="cell" data-hash="index_cache/html/unnamed-chunk-5_0b9754afebe0c45bf8f8138805e211d0">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="do">######## get the median ####</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>med <span class="ot">&lt;-</span> fitLM<span class="sc">$</span>med</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>med</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># [1] 0.551916</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>med_lo <span class="ot">&lt;-</span> fitLM<span class="sc">$</span>med_lo</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>med_hi <span class="ot">&lt;-</span> fitLM<span class="sc">$</span>med_hi</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>med_lo</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># [1] 0.4018724</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>med_hi</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># [1] 0.7019595</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>So the estimated median DOR (95% CI) is 0.552 (0.402, 0.702).</p>
 
 
 

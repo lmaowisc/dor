@@ -2,7 +2,9 @@
 title: "Analysis of duration of response in oncology studies"
 author: Lu Mao, Lu Tian, Bo Huang, Lee-Jen Wei
 execute: 
-  eval: false
+  # eval: false
+  echo: true
+  cache: true
 bibliography: references.bib
 ---
 
@@ -24,9 +26,10 @@ For notational convenience, set $T_1=T_2$ for nonresponders.
 
 #### R-program
 
-To use the program, download `DORfunctions.R` from repo <https://github.com/lmaowisc/dor>. The file contains all functions needed to perform the analysis.
+To use the program, download `DORfunctions.R` from repo <https://github.com/lmaowisc/dor>. The R-file contains all functions needed to perform the analysis. We also need the standard `survival` package.
 
 ```{r}
+library(survival)
 source("DORfunctions.R")
 ```
 
@@ -54,4 +57,77 @@ lower and upper limits of the 95\% confidence interval of the median, respective
 
 #### A simulated example
 
-ss
+Let's simulate a data set of size $n=200$.
+
+```{r}
+# set seed for random number generation
+set.seed(2023)
+
+## simulate data
+n <- 200
+# set restriction time
+tau <- 1.25
+
+# full data
+t1 <- pmin(rexp(n), runif(n, 0, 0.75)) # response time
+t2 <- rexp(n)*1.5 # outcome event time
+t1[t1>t2] <- t2[t1>t2] # set t1 = t2 for non-responders
+c <- runif(n, 0, 1.5) # censoring time
+
+# observed (censored) data
+x1 <- pmin(t1, c)
+delta1 <- 1*(t1<c)
+x2 <- pmin(t2, c)
+delta2 <- 1*(t2<c)
+```
+
+So the observed data consist of `x1`, `delta1`, `x2`, and `delta2`.
+Under restriction time `tau`$= 1.25$.
+We analyze the DOR distribution using the main function `dorfit()`,
+with inference on the median.
+
+```{r}
+fitLM <- dorfit(x1, delta1, x2, delta2, tau, med_inf = TRUE)
+```
+
+
+Let's plot the estimated $S_D(t)$ with 95\% pointwise confidence limits.
+
+```{r}
+
+za <- qnorm(0.975)
+## marginal survival function P(D > t)
+t <- fitLM$t1 # times
+St <- fitLM$surv1 # P(D > t)
+se <- fitLM$se1 # se of P(D > t)
+
+# set up the figure
+plot(c(0, 1.2), c(0, 1), type="n",xlab="t",ylab=expression(S[D](t)))
+
+# plot the marginal curve P(D > t)
+lines(stepfun(t, c(1,St)),lwd=2, do.points = FALSE) # marginal
+lines(stepfun(t, c(1,St + za * se)),lty = 3, do.points = FALSE) # upper 95% CI 
+lines(stepfun(t, c(1,St - za * se)),lty = 3, do.points = FALSE) # lower 95% CI 
+
+```
+
+We can see that the median is close to 0.6. The precise number and confidence interval (CI)
+can be obtained from `obj`.
+```{r}
+#| output: false
+
+######## get the median ####
+med <- fitLM$med
+med
+# [1] 0.551916
+
+med_lo <- fitLM$med_lo
+med_hi <- fitLM$med_hi
+med_lo
+# [1] 0.4018724
+med_hi
+# [1] 0.7019595
+```
+
+So the estimated median DOR (95\% CI) is `r round(med, 3)` 
+(`r round(med_lo, 3)`, `r round(med_hi, 3)`).
