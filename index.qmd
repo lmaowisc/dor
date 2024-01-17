@@ -18,7 +18,7 @@ This R-code implements the analysis of duration-of-response data described in @m
 
 ### Background
 
-Duration-of-response (DOR) is often utilized to assess efficacy of oncology therapies. While valid procedures are available for estimating the mean [@huang2018; @huang2020; @huang2022], it is unclear how to estimate the distribution of DOR, which may provide a fuller picture. Simple Kaplan–Meier estimates based on the responders can result in distorted conclusions due to the existence of non-responders (whose DOR is zero).
+Duration-of-response (DOR) is often utilized to assess efficacy of oncology therapies. While valid procedures are available for estimating the mean of DOR [@huang2018; @huang2020; @huang2022], it is unclear how to estimate its distribution, which may provide a fuller picture. Simple Kaplan–Meier estimates based on the responders can result in distorted conclusions as they ignore the existence of non-responders (whose DOR is zero).
 
 ### Notation and Methodology
 
