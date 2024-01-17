@@ -120,7 +120,7 @@ lines(stepfun(t, c(1,St - za * se)),lty = 3, do.points = FALSE) # lower 95% CI
 
 ```
 
-We can see that the median is close to 0.6. The precise number and confidence interval (CI) can be obtained from `obj`.
+We can see that the median is close to 0.6. The precise number and confidence interval (CI) can be obtained from `fitLM`.
 
 ```{r}
 #| output: false
