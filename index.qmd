@@ -3,8 +3,16 @@ title: "Analysis of duration of response in oncology studies"
 bibliography: references.bib
 ---
 
-This R-code implements the analysis of duration-of-response data for oncology studies described in @mao:2024.
+This R-code implements the analysis of duration-of-response data described in @mao:2024 for oncology studies .
+
+### Background
+
+Duration-of-response (DOR) is often utilized to assess efficacy of oncology therapies.
 
 [@huang2018]
 
-@mao:2024
+### Statistical Methodology
+
+### Usage and Example
+
+ss
