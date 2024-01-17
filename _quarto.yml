@@ -4,10 +4,10 @@ project:
 
 website:
   title: "Duration of response in oncology"
-  # navbar:
-  #   left:
-  #     - href: index.qmd
-  #       text: Home
+  navbar:
+    left:
+    - href: index.qmd
+      text: Main
 format:
   html:
     theme: cosmo
