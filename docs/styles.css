@@ -1,2 +1,9 @@
 /* css styles */
 
+.math.inline {
+  font-size: 90%  !important;
+}
+
+.MathJax, .MathJax_Display  {
+    font-size: 85%  !important;
+}
