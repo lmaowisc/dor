@@ -6,6 +6,7 @@ execute:
 bibliography: references.bib
 ---
 
+
 This R-code implements the analysis of duration-of-response data described in @mao:2024 for oncology studies .
 
 ### Background
@@ -24,9 +25,14 @@ For notational convenience, set $T_1=T_2$ for nonresponders.
 
 To use the program, download `DORfunctions.R` from <https://github.com/lmaowisc/dor>. The file contains all functions needed to perform the analysis.
 
-```{r}
+
+::: {.cell}
+
+```{.r .cell-code}
 source("DORfunctions.R")
 ```
+:::
+
 
 The main function is `dorfit(x1, delta1, x2, delta2, tau, med_inf = FALSE)`.
 
@@ -49,3 +55,4 @@ The main function is `dorfit(x1, delta1, x2, delta2, tau, med_inf = FALSE)`.
 #### A simulated example
 
 ss
+
