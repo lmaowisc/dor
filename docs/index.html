@@ -207,7 +207,7 @@ div.csl-indent {
 <p>A simple estimator of <span class="math inline">\(S_D(t)\)</span> is the inverse probability censoring weighted (IPCW) estimator: <span class="math display">\[
 \hat S_D(t)=n^{-1}\sum_{i=1}^n  \frac{\Delta_{2i}}{\hat{G}_C(X_{2i})} I(\tilde D_i&gt; t),
 \]</span> where <span class="math inline">\(\hat{G}_C(t)\)</span> is the Kaplan–Meier estimator of <span class="math inline">\(G_C(t)=P(C&gt;t)\)</span> based on <span class="math inline">\(\{(X_{2i}, 1-\Delta_{2i}), i=1, \cdots, n\}\)</span>. To see <span class="math inline">\(\hat S_D(t)\)</span> as a valid estimator, note that <span class="math inline">\(\Delta_{2}=1\)</span> implies that <span class="math inline">\(X_2=T_2\wedge\tau\)</span>, <span class="math inline">\(X_1=T_1\wedge\tau\)</span> and thus that <span class="math inline">\(\tilde D = D\)</span>. Hence, <span class="math inline">\(E\left\{\Delta_2I(\tilde D&gt;t)/G_C(X_2)\right\}= E\left\{\Delta_2I(D&gt;t)/G_C(T_2\wedge\tau)\right\} =E\left[E\left\{\Delta_2I(D&gt;t)/G_C(T_2\wedge\tau)\mid T_1, T_2\right\}\right] =E\{I(D&gt;t)\}=S_D(t)\)</span>, where the second equality follows by the independence of <span class="math inline">\(C\)</span> and <span class="math inline">\((T_1, T_2)\)</span>. Moreover, we can show that <span class="math inline">\(\hat S_D(t)\)</span> converges weakly to a Gaussian process with an easily estimable variance function.</p>
-<p>The median DOR can thus be estimated by <span class="math inline">\(\inf\{t: \hat S_D(t)\geq 0.5\}\)</span>, whose variance can be estimated by the perturbing the influence functions of <span class="math inline">\(\hat S_D(t)\)</span> using standard normal distributed random noises.</p>
+<p>The median DOR can thus be estimated by <span class="math inline">\(\inf\{t: \hat S_D(t)\geq 0.5\}\)</span>, whose variance can be estimated by the perturbing the influence functions of <span class="math inline">\(\hat S_D(t)\)</span> using standard normal random noises.</p>
 </section>
 </section>
 <section id="usage-and-example" class="level3">
@@ -222,18 +222,18 @@ div.csl-indent {
 <p>The main function is <code>dorfit(x1, delta1, x2, delta2, tau, med_inf = FALSE)</code>.</p>
 <p><strong>Input</strong></p>
 <ul>
-<li><code>x1</code> time to earliest of response, outcome event, or censoring</li>
-<li><code>delta1</code> indicator of response</li>
-<li><code>x2</code> time to earlier of outcome event and censoring</li>
-<li><code>delta2</code> indicator of outcome event</li>
-<li><code>tau</code> restriction time</li>
-<li><code>med_inf</code> whether to make inference on the median DOR</li>
+<li><code>x1</code> time to earliest of response, outcome event, or censoring (<span class="math inline">\(X_1\)</span>)</li>
+<li><code>delta1</code> indicator of response (<span class="math inline">\(\Delta_1\)</span>)</li>
+<li><code>x2</code> time to earlier of outcome event and censoring (<span class="math inline">\(X_2\)</span>)</li>
+<li><code>delta2</code> indicator of outcome event (<span class="math inline">\(\Delta_2\)</span>)</li>
+<li><code>tau</code> restriction time (<span class="math inline">\(\tau\)</span>)</li>
+<li><code>med_inf</code> whether to make inference on the median DOR (default is <code>FALSE</code>)</li>
 </ul>
 <p><strong>Output</strong></p>
 <ul>
-<li><code>t1</code> vector of times (t)</li>
-<li><code>surv1</code> IPCW estimates of survival function <span class="math inline">\(P(D &gt; t)\)</span></li>
-<li><code>se1</code> pointwise standard error of <span class="math inline">\(P(D &gt; t)\)</span></li>
+<li><code>t1</code> vector of times (<span class="math inline">\(t\)</span>)</li>
+<li><code>surv1</code> IPCW estimates of survival function <span class="math inline">\(\hat S_D(t)\)</span></li>
+<li><code>se1</code> pointwise standard error of <span class="math inline">\(\hat S_D(t)\)</span></li>
 <li><code>med</code> median estimate of DOR</li>
 <li><code>med_se, med_lo, med_hi</code> these are standard error, lower and upper limits of the 95% confidence interval of the median, respectively, if <code>med_inf = TRUE</code>; all <code>NULL</code> if <code>med_inf = FALSE</code></li>
 </ul>

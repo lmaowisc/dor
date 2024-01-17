@@ -57,7 +57,7 @@ to a Gaussian process with an easily estimable variance function.
 
 The median DOR can thus be estimated by $\inf\{t: \hat S_D(t)\geq 0.5\}$,
 whose variance can be estimated by the perturbing the influence
-functions of $\hat S_D(t)$ using standard normal distributed random noises.
+functions of $\hat S_D(t)$ using standard normal random noises.
 
 
 ### Usage and Example
@@ -75,18 +75,18 @@ The main function is `dorfit(x1, delta1, x2, delta2, tau, med_inf = FALSE)`.
 
 **Input**
 
--   `x1` time to earliest of response, outcome event, or censoring
--   `delta1` indicator of response
--   `x2` time to earlier of outcome event and censoring 
--   `delta2` indicator of outcome event
--   `tau` restriction time
--   `med_inf` whether to make inference on the median DOR
+-   `x1` time to earliest of response, outcome event, or censoring ($X_1$)
+-   `delta1` indicator of response ($\Delta_1$)
+-   `x2` time to earlier of outcome event and censoring ($X_2$) 
+-   `delta2` indicator of outcome event ($\Delta_2$)
+-   `tau` restriction time ($\tau$)
+-   `med_inf` whether to make inference on the median DOR (default is `FALSE`)
 
 **Output**
 
--   `t1` vector of times (t)
--   `surv1` IPCW estimates of survival function $P(D > t)$
--   `se1` pointwise standard error of $P(D > t)$
+-   `t1` vector of times ($t$)
+-   `surv1` IPCW estimates of survival function $\hat S_D(t)$
+-   `se1` pointwise standard error of $\hat S_D(t)$
 -   `med` median estimate of DOR
 -   `med_se, med_lo, med_hi` these are standard error, 
 lower and upper limits of the 95\% confidence interval of the median, respectively,
