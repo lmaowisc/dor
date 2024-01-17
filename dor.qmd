@@ -1,0 +1,260 @@
+---
+title: "The distribution of duration of response"
+date: "10/11/2023"
+format: 
+  html:
+    code-fold: true
+editor: visual
+execute: 
+  warning: false
+---
+
+## Definition
+
+#### Notation
+
+-   $T_1:$ time to response;
+-   $T_2:$ time to progression or death;
+-   $\tau:$ restriction time (to be determined by distribution of $T_2$);
+-   $D = T_2\wedge\tau - T_1\wedge\tau$.
+
+#### Estimand
+
+$$S_D(t)={\rm Pr}(D>t), \hspace{10mm} t\in [0, \tau].$$
+
+#### Censored data
+
+-   $C:$ censoring time;
+-   $X_1 = T_1\wedge\tau\wedge C$;
+-   $\delta_1 = I(T_1\wedge\tau\leq C)$;
+-   $X_2 = T_2\wedge\tau\wedge C$;
+-   $\delta_2 = I(T_2\wedge\tau\leq C)$.
+
+An random $n$-sample of $(X_1,\delta_1, X_2, \delta_2)$ is $$(X_{1i},\delta_{1i}, X_{2i}, \delta_{2i}), \hspace{5mm} i= 1,\ldots, n.$$
+
+## IPCW Estimator
+
+$$\widehat S_D(t)=n^{-1}\sum_{i=1}^n  \frac{\delta_{2i}}{\widehat{G}_C(X_{2i})} 
+I(X_{2i} - X_{1i}> t),$$ where $\widehat{G}_C(t)$ is the Kaplan--Meier estimator for ${\rm Pr}(C > t)$.
+
+## Simulations
+
+#### Estimation of $S_D(t)$
+
+```{r}
+#| eval: false
+
+library(survival)
+## LM's function for IPCW (with se)
+source("DORfunctions.R")
+
+rm(list=ls())
+# input: (x1, delta1, x2, delta2, tau)
+
+# LT's function for IPCW
+dorsurvfun1=function(x1, delta1, x2, delta2, tau, n.t.grd=100)
+{
+  n=length(x1)
+  x1=pmin(x1, tau)
+  delta1[x1==tau]=1
+  x2=pmin(x2, tau)
+  delta2[x2==tau]=1
+  
+  fitc=survfit(Surv(x2, 1-delta2)~1)
+  time0=c(0, fitc$time)
+  surv0=c(1, fitc$surv)
+  
+
+  weight=rep(0, n)
+  for(ii in 1:n)
+  {if(delta2[ii]>0)
+      weight[ii]=1/min(surv0[time0<=x2[ii]])
+  }
+  
+  t.grd=seq(0, tau, length=n.t.grd)
+  surv.grd=rep(NA, n.t.grd)
+  for(i in 1:n.t.grd)
+  { t0=t.grd[i]
+    surv.grd[i]=sum((x2>x1+t0)*weight)/n
+  }
+  
+  return(list(time=t.grd, surv=surv.grd))
+}
+
+
+## example
+
+n=200
+n.t.grd=100
+tau=1.25
+
+B=1000  # number of simulation
+
+surv1 = matrix(0, B, n.t.grd)
+surv1LM = matrix(0, B, n.t.grd)
+
+for(b in 1:B){
+  t1=pmin(rexp(n), runif(n, 0, 0.75))
+  t2=rexp(n)*1.5
+  t1[t1>t2]=t2[t1>t2]
+  c=runif(n, 0, 1.5)
+
+
+  x1=pmin(t1, c)
+  delta1=1*(t1<c)
+  x2=pmin(t2, c)
+  delta2=1*(t2<c)
+
+  fit1=dorsurvfun1(x1, delta1, x2, delta2, tau, n.t.grd=n.t.grd)
+  surv1[b,]=fit1$surv
+  time0=fit1$time
+  ## added by LM
+  
+  fitLM <- dorfit(x1, delta1, x2, delta2, tau, M=n.t.grd)
+  m <- length(fitLM$t1)
+  surv1LM[b,] <- fitLM$surv1[ecdf(fitLM$t1)(time0) * m]
+  
+  cat(b,"\n")
+}
+
+par(mfrow=c(1,1))
+plot(c(0, tau), c(0, 1), type="n", xlab = "t", ylab = expression(S[D](t)))
+lines(time0, apply(surv1, 2, mean), col=2, lwd = 2)  #LT
+lines(time0, apply(surv1LM, 2, mean), col=3) #LM
+legend("topright", lwd = c(2, 1), col = 2:3, c("LT", "LM"))
+
+```
+
+```{r}
+#| echo: false
+
+library(survival)
+library(tidyverse)
+library(knitr)
+
+results <- readRDS("results.rds")
+
+tau <- results$tau[1]
+
+za <- qnorm(0.975)
+
+theme_set(theme_bw())
+colors <- c("Sepal Width" = "blue", "Petal Length" = "red", "Petal Width" = "orange")
+
+results |> 
+  mutate(
+    ymin = surv_LM * exp(- za * surv_se_LM/surv_LM),
+    ymax = surv_LM * exp(za * surv_se_LM/surv_LM)
+  ) |> 
+  ggplot(aes(x = t, y = surv_LM)) +
+  geom_line(aes(color = "LM"),lwd = 2, alpha = 0.8) +
+  geom_line(aes(y = surv_LT, color = "LT"), lwd = 1,  alpha = 0.8) +
+  geom_ribbon(aes(ymin = ymin, ymax = ymax),
+              alpha = 0.25) +
+  coord_cartesian(xlim = c(0, 1.25), ylim = c(0, 1)) +
+  scale_color_manual(values = c("LM" = "red", "LT" = "blue")) +
+  labs(x = "t",
+       y = expression(S[D](t)),
+       color = "Program") 
+
+
+```
+
+#### Estimation of $S_D(t)/S_D(0)$
+
+```{r}
+#| eval: true
+
+
+
+n0=10000
+t1=pmin(rexp(n0), runif(n0, 0, 0.75))
+t2=rexp(n0)*1.5
+t1[t1>t2]=t2[t1>t2]
+
+
+unres <- tibble(dor=c(0, sort((t2-t1)[t2>t1])))
+
+m=length(unres$dor) -1
+
+unres$St <- 1- (0:m)/m
+
+results |> 
+  mutate(
+    ymin = surv_cond * exp(- za * surv_cond_logse),
+    ymax = surv_cond * exp(+ za * surv_cond_logse),
+  ) |> 
+  ggplot(aes(x = t, y = surv_cond)) +
+  geom_line(aes(color = "Restricted"), lwd = 1.5) +
+  geom_ribbon(aes(ymin = ymin, ymax = ymax), alpha = 0.3) +
+  geom_line(data = unres, aes(x = dor, y = St, color = "Unrestricted"), lwd = 1.5) +
+  xlim(0, 1.25) +
+  labs(
+    x = "Time",
+    y = "Survival Probability of DOR",
+    color = "Legend"
+  ) +
+  scale_color_brewer(palette = "Set1")
+
+
+```
+
+#### Inference of $S_D(t)/S_D(0)$
+
+```{r}
+
+### inference 
+set.seed(2023)
+tau <- 1.25
+
+n0=1000000
+t1=pmin(rexp(n0), runif(n0, 0, 0.75))
+t2=rexp(n0)*1.5
+t1[t1>t2]=t2[t1>t2]
+t1tau <- pmin(t1, tau)
+t2tau <- pmin(t2, tau)
+t1tau[t1tau>t2tau]=t2tau[t1tau>t2tau]
+res <- tibble(t=c(0, sort((t2tau-t1tau)[t2tau>t1tau])))
+m=length(res$t) - 1
+
+# m
+res$St <- 1 - (0:m)/m
+
+
+# res
+
+t0 <- c(0.25, 0.5, 0.75, 1)
+m <- m + 1
+
+ind <- round(ecdf(res$t)(t0) * m)
+res_infer <- res[ind, ]
+res_infer$t <- t0
+
+# res_infer
+
+# Restore it under a different name
+results2 <- readRDS("results2.rds")
+
+
+
+
+infer <- merge(res_infer, results2, by = 1)
+
+# infer
+
+
+### tabulate
+
+tab <- infer |> 
+  mutate(
+    True = St,
+    Bias = exp(surv_cond_log) - St,
+    SE = surv_cond_empse,
+    SEE = exp(surv_cond_log) * surv_cond_logse,
+    CP = surv_cond_cp
+  ) |> 
+  select(t, True, Bias, SE, SEE, CP) 
+
+kable(round(tab, 3), caption = "Table 1. Estimation and inference of Pr(D > t| D >0).")
+
+```

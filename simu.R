@@ -22,7 +22,7 @@ delta2=1*(t2<c)
 
 
 # fit the data
-fitLM <- dorfit(x1, delta1, x2, delta2, tau, med_inf = TRUE)
+fitLM <- dorfit(x1, delta1, x2, delta2, tau)
 
 za <- qnorm(0.975)
 ## marginal survival function P(D > t)
@@ -54,16 +54,60 @@ lines(stepfun(t, c(1,cSt)),col="blue",lwd=2, do.points = FALSE) # conditional
 legend("topright", lwd = 2, col = c("red", "blue"), c("P(D>t)", "P(D>t|D>0)"))
 
 ######## get the median ####
-med <- fitLM$med
+med <- t[which(St <= 0.5)[1]]
 med
 # [1] 0.551916
 
-med_lo <- fitLM$med_lo
-med_hi <- fitLM$med_hi
-med_lo
-# [1] 0.4018724
-med_hi
-# [1] 0.7019595
+fitLM$med1
+fitLM$med_se
 
 
-usethis::use_github()
+### small simulations ###
+
+
+n=200
+# set restriction time
+tau=1.25
+# simulate data
+# set.seed(2023)
+
+ns <- 1000
+
+results <-matrix(NA, 2, ns)
+
+for (j in 1:ns){
+
+t1=pmin(rexp(n), runif(n, 0, 0.75))
+t2=rexp(n)*1.5
+t1[t1>t2]=t2[t1>t2]
+c=runif(n, 0, 1.5)
+
+
+x1=pmin(t1, c)
+delta1=1*(t1<c)
+x2=pmin(t2, c)
+delta2=1*(t2<c)
+
+
+# fit the data
+fitLM <- dorfit(x1, delta1, x2, delta2, tau)
+
+za <- qnorm(0.975)
+## marginal survival function P(D > t)
+t <- fitLM$t1 # times
+St <- fitLM$surv1 # P(D > t)
+se <- fitLM$se1 # se of P(D > t)
+
+results[1, j] <- fitLM$med1
+results[2, j] <- fitLM$med_se
+
+cat(j, sd(results[1, ], na.rm =TRUE),
+    mean(results[2, ], na.rm =TRUE), "\n")
+}
+
+
+sd(results[1, ], na.rm =TRUE)
+mean(results[2, ], na.rm =TRUE)
+
+
+
