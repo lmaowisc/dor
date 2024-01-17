@@ -196,7 +196,15 @@ div.csl-indent {
 </section>
 <section id="notation-and-methodology" class="level3">
 <h3 class="anchored" data-anchor-id="notation-and-methodology">Notation and Methodology</h3>
+<section id="full-and-observed-data" class="level4">
+<h4 class="anchored" data-anchor-id="full-and-observed-data">Full and Observed Data</h4>
 <p>For a responder, let <span class="math inline">\(T_1\)</span> denote the time to response. Let <span class="math inline">\(T_2\)</span> denote the time to disease progression or death. If a patient experiences progression/death first, then <span class="math inline">\(T_1=\infty\)</span>. The DOR can be defined as <span class="math inline">\([T_2-T_1]_+\)</span>, where <span class="math inline">\(x_+=xI(x&gt;0).\)</span> Thus, DOR is <span class="math inline">\(T_2-T_1\)</span> for responders, i.e., those with <span class="math inline">\(T_1&lt;\infty\)</span>, and 0 for nonresponders. For notational convenience, set <span class="math inline">\(T_1=T_2\)</span> for nonresponders.</p>
+<p>Due to limited follow-up, the entire distribution of DOR is not identifiable. Instead, we define the restricted DOR within a time window as <span class="math inline">\(D=T_2\wedge \tau -T_1\wedge \tau\)</span>, where <span class="math inline">\(\tau\)</span> is a pre-specified restriction time. Our goal is to estimate the survival function of <span class="math inline">\(D:\)</span> <span class="math display">\[S_D(t)=P(D&gt;t), \,\,\,\,\, t\in [0, \tau].\]</span></p>
+<p>Let <span class="math inline">\(C\)</span> denote the censoring time independent of <span class="math inline">\((T_1, T_2)\)</span> and satisfying <span class="math inline">\(P(C\geq \tau)&gt;0\)</span>. Then we observe <span class="math inline">\((X_1,\Delta_1,X_2,\Delta_2)\)</span>, where <span class="math inline">\(X_1=\min(T_1\wedge\tau, C)\)</span>, <span class="math inline">\(\Delta_1=I(T_1\wedge\tau\leq C)\)</span>, <span class="math inline">\(X_2=\min(T_2\wedge\tau,C)\)</span>, and <span class="math inline">\(\Delta_2=I(T_2\wedge\tau\leq C).\)</span> Write <span class="math inline">\(\tilde D=X_2 - X_1\)</span>. Here both <span class="math inline">\(T_1\)</span> and <span class="math inline">\(T_2\)</span> are subject to the same censoring time <span class="math inline">\(C\)</span>. The observed data consist of <span class="math inline">\(n\)</span> independent and identically distributed (i.i.d.) copies of <span class="math inline">\((X_1,\Delta_1,X_2,\Delta_2)\)</span>: <span class="math inline">\(\{(X_{1i},\Delta_{1i},X_{2i},\Delta_{2i}): i=1,\ldots,n\}.\)</span> Write <span class="math inline">\(\tilde D_i=X_{2i}- X_{1i}\)</span>.</p>
+</section>
+<section id="estimation-and-inference" class="level4">
+<h4 class="anchored" data-anchor-id="estimation-and-inference">Estimation and Inference</h4>
+</section>
 </section>
 <section id="usage-and-example" class="level3">
 <h3 class="anchored" data-anchor-id="usage-and-example">Usage and Example</h3>
