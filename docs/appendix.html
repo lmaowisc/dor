@@ -146,12 +146,24 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<p>This appendix contains technical details of the DOR methodology described in <a href="./index.html">Main</a>.</p>
+<p>This appendix contains technical details of the DOR methodology outlined in <a href="./index.html">Main</a>.</p>
 <section id="asymptotic-distribution-of-hat-s_dt" class="level3">
 <h3 class="anchored" data-anchor-id="asymptotic-distribution-of-hat-s_dt">Asymptotic distribution of <span class="math inline">\hat S_D(t)</span></h3>
+<p>Using the functional delta method on the estimator <span class="math inline">\hat{G}_C(t)</span> within <span class="math inline">\hat S_D(t)</span>, we can show that, as <span class="math inline">n\to\infty</span>, <span class="math inline">\hat S_{D}(t)\to_p S_D(t)</span> and <span class="math inline">n^{1/2}\{\hat{S}_{D}(t)-S_D(t)\}\to_d N\{0,\sigma^2_{D}(t)\}</span>, with <span class="math inline">\sigma^2_{D}(t)</span> consistently estimated by <span class="math display">\hat\sigma^2_{D}(t)=n^{-1}\sum_{i=1}^n\left\{
+\frac{\Delta_{2i}}{\hat G_C(X_{2i})}I(\tilde D_i&gt;t)-\hat S_{D}(t)
++\int_0^\tau \frac{\hat\zeta(u,t)}{\hat\pi_2(u)}{\rm d}\hat M_i^C(u)
+\right\}^2,</span> where <span class="math inline">\hat\zeta(u,t)= n^{-1}\sum_{i=1}^n\Delta_{2i}I(\tilde D_i&gt;t,X_{2i}\geq u)/\hat G_C(X_{2i})</span>, <span class="math inline">\hat\pi_2(u)=n^{-1}\sum_{i=1}^nI(X_{2i}\geq u)</span>, <span class="math inline">\hat M_i^C(u)=I(X_{2i}\leq u, \Delta_{2i}=0)-\hat\Lambda_C(X_{2i}\wedge u)</span>, and <span class="math inline">\hat\Lambda_C(\cdot)</span> is the Nelsen-Aalen estimator for the cumulative hazard function of <span class="math inline">C</span>.</p>
 </section>
 <section id="inference-on-the-median" class="level3">
 <h3 class="anchored" data-anchor-id="inference-on-the-median">Inference on the median</h3>
+<p>Let <span class="math inline">\mathcal M(S_D)=\inf\{t: S_D(t)\leq 0.5\}</span> denote the median operator on the survival function <span class="math inline">S_D(\cdot)</span>. Then the estimator for median DOR is just <span class="math inline">\mathcal M(\hat S_D)</span>. To make inference, we need to quantify the randomness in <span class="math inline">\hat S_D(t)</span> as a Gaussian process. To do so, note that the previous section suggests that the influence function of <span class="math inline">\hat S_D(t)</span> is estimated by</p>
+<p><span class="math display">
+\hat\eta_i(t)\equiv \frac{\Delta_{2i}}{\hat G_C(X_{2i})}I(\tilde D_i&gt;t)-\hat S_{D}(t)
++\int_0^\tau \frac{\hat\zeta(u,t)}{\hat\pi_2(u)}{\rm d}\hat M_i^C(u).
+</span> This means that the asymptotic distribution of <span class="math inline">\hat S_D(t)</span> is approximated by the Gaussian process</p>
+<p><span class="math display">
+S_D(t) + n^{-1}\hat{\boldsymbol\eta}(t)^{\rm T}\boldsymbol Z, \mbox{ok}
+</span> where <span class="math inline">{\boldsymbol\eta}(t) = \{\hat\eta_1(t),\ldots, \hat\eta_n(t)\}^{\rm T}</span> and <span class="math inline">\boldsymbol Z = (Z_1, \ldots, Z_n)^{\rm T}</span> is a vector of i.i.d. standard normal random variables. Then we can approximate the asymptotic distribution of <span class="math inline">\mathcal M(\hat S_D)</span> by that of <span class="math inline">\mathcal M\left\{\hat S_D(\cdot) + n^{-1}\hat{\boldsymbol\eta}(\cdot)^{\rm T}\boldsymbol Z\right\}</span> using repeatedly generated <span class="math inline">\boldsymbol Z</span> (the default is <span class="math inline">N = 1000</span> replicates).</p>
 
 
 </section>
