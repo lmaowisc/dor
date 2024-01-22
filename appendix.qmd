@@ -49,12 +49,13 @@ This means that the asymptotic distribution of $\hat S_D(t)$ is approximated by
 the Gaussian process 
 
 $$
-S_D(t) + n^{-1}\hat{\boldsymbol\eta}(t)^{\rm T}\boldsymbol Z, \mbox{ok}
+\underbrace{S_D(t)}_{\rm central\, term} + 
+\underbrace{n^{-1}\hat{\boldsymbol\eta}(t)^{\rm T}\boldsymbol Z}_{\rm perturbation\, term}, 
 $$
 where ${\boldsymbol\eta}(t) = \{\hat\eta_1(t),\ldots, \hat\eta_n(t)\}^{\rm T}$
 and $\boldsymbol Z = (Z_1, \ldots, Z_n)^{\rm T}$ is a vector of i.i.d. standard normal
 random variables. Then we can approximate the asymptotic distribution of 
-$\mathcal M(\hat S_D)$ by that of $\mathcal M\left\{\hat S_D(\cdot) + n^{-1}\hat{\boldsymbol\eta}(\cdot)^{\rm T}\boldsymbol Z\right\}$ using repeatedly generated $\boldsymbol Z$
+$\mathcal M(\hat S_D)$ by that of $\mathcal M\left\{\hat S_D(\cdot) + n^{-1}\hat{\boldsymbol\eta}(\cdot)^{\rm T}\boldsymbol Z\right\}$ under repeatedly generated $\boldsymbol Z$
 (the default is $N = 1000$ replicates).
 
 
