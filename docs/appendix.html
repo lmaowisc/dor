@@ -156,7 +156,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="inference-on-the-median" class="level3">
 <h3 class="anchored" data-anchor-id="inference-on-the-median">Inference on the median</h3>
-<p>Let <span class="math inline">\mathcal M(S_D)=\inf\{t: S_D(t)\leq 0.5\}</span> denote the median operator on the survival function <span class="math inline">S_D(\cdot)</span>. Then the estimator for median DOR is just <span class="math inline">\mathcal M(\hat S_D)</span>. To make inference, we need to quantify the randomness in <span class="math inline">\hat S_D(t)</span> as a Gaussian process. To do so, note that the previous section suggests that the influence function of <span class="math inline">\hat S_D(t)</span> is estimated by</p>
+<p>Let <span class="math inline">\mathcal M(S_D)=\inf\{t: S_D(t)\leq 0.5\}</span> denote the median operator based on the survival function <span class="math inline">S_D(\cdot)</span>. Then we can re-write the estimator for median DOR as <span class="math inline">\mathcal M(\hat S_D)</span>. To make inference, we need to quantify the randomness in <span class="math inline">\hat S_D(t)</span> as a Gaussian process. To do so, note that the previous section suggests that the influence function of <span class="math inline">\hat S_D(t)</span> is estimated by</p>
 <p><span class="math display">
 \hat\eta_i(t)\equiv \frac{\Delta_{2i}}{\hat G_C(X_{2i})}I(\tilde D_i&gt;t)-\hat S_{D}(t)
 +\int_0^\tau \frac{\hat\zeta(u,t)}{\hat\pi_2(u)}{\rm d}\hat M_i^C(u).

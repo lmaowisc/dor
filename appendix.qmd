@@ -36,8 +36,8 @@ for the cumulative hazard function of $C$.
 ### Inference on the median
 
 Let $\mathcal M(S_D)=\inf\{t: S_D(t)\leq 0.5\}$ denote the median operator
-on the survival function $S_D(\cdot)$. Then the estimator for median DOR
-is just $\mathcal M(\hat S_D)$. To make inference, we need to quantify the randomness
+based on the survival function $S_D(\cdot)$. Then we can re-write the estimator for 
+median DOR as $\mathcal M(\hat S_D)$. To make inference, we need to quantify the randomness
 in $\hat S_D(t)$ as a Gaussian process. To do so, note that the previous section
 suggests that the influence function of $\hat S_D(t)$ is estimated by
 
