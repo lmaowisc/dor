@@ -65,6 +65,14 @@ med_lo
 med_hi
 # [1] 0.7019595
 
+##### get the AUC
 
-usethis::use_github()
-usethis::use_git_remote("origin", url = NULL, overwrite = TRUE)
+rmst <- fitLM$rmst
+rmst
+
+rmst_lo <- fitLM$rmst_lo
+rmst_hi <- fitLM$rmst_hi
+rmst_lo
+# [1,] 0.4862219
+rmst_hi
+# [1,] 0.664599

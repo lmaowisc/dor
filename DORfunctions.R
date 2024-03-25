@@ -4,8 +4,15 @@ med_fun <- function(t, St){
   t[which(St <= 0.5)[1]]
 }
 
+t <- t1
+St <- surv1
 
 
+mean_fun <- function(t, St){
+  
+  sum(diff(t) * St[- length(St)])
+  
+}
 
 #######################################################
 #   Main function: Naive and improved IPCW estimator  #
@@ -122,29 +129,48 @@ dorfit <- function(x1, delta1, x2, delta2, tau, med_inf = FALSE)
   IF1MAT <- surv1MAT - matrix(rep(surv1,each=n),n,m1) + IF1CMAT
 
   # dim(IF1MAT)
-  
+
+
   V1 <- colMeans(IF1MAT^2)/n
   se1 <- sqrt(V1)
   
   
+  ## AUC ##
+  
+  Sigma <- t(IF1MAT) %*% IF1MAT / n^2
+  # diag(Sigma) == V1
+  rmst <- mean_fun(t1, surv1)
+  se_rmst <- sqrt(t(diff(t1)) %*% Sigma[-m1, -m1] %*% diff(t1))
+   # 95% CI
+  za <- qnorm(0.975)
+  rmst_lo <- rmst - za * se_rmst
+  rmst_hi <- rmst + za * se_rmst
+  
+  
   #### compute median and inference ####
   med <- med_fun(t1, surv1)
+  
+  
+  
   if (med_inf){
     N <- 1000
     ## standard normal perturbations
     pertb <- matrix(rnorm(n * N), n, N)
     
     med_list <- rep(NA, N)
+    # mean_list <- rep(NA, N)
     
     for (j in 1:N){
       # perturb the survival function
       surv1j <- surv1 + colMeans(IF1MAT * matrix(rep(pertb[, j], m1), n, m1))
       # get the median
       med_list[j] <- med_fun(t1, surv1j)
+      # mean_list[j] <- mean_fun(t1, surv1j)
     }
     
     # se for median
     med_se <- sd(med_list, na.rm = TRUE)
+    # mean_se <- sd(mean_list, na.rm = TRUE)
     # ci for median
     za <- qnorm(0.975)
     med_lo <- med - za *med_se
@@ -169,7 +195,10 @@ dorfit <- function(x1, delta1, x2, delta2, tau, med_inf = FALSE)
   
   se_log_surv_cond[is.na(se_log_surv_cond)] <- 0
   
-  return(list(t1=t1, surv1=surv1, se1=se1, med = med, med_se = med_se, 
+  return(list(t1=t1, surv1=surv1, se1=se1, rmst = rmst, 
+              se_rmst = se_rmst, rmst_lo = rmst_lo, rmst_hi = rmst_hi,
+              # mean_se = mean_se,
+              med = med, med_se = med_se, 
               med_lo = med_lo, med_hi = med_hi,
               log_surv_cond=log_surv_cond, 
               se_log_surv_cond=se_log_surv_cond))
